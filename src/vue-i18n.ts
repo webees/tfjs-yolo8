@@ -4,10 +4,10 @@
  */
 import { App } from 'vue'
 import { createI18n } from 'vue-i18n'
-import { app } from '@/stores'
+import { app } from '@/vue-pinia'
 import Axios from 'axios'
 
-import messages from './enUS'
+import messages from '@/i18n/enUS'
 
 let DEFAULT_LANG: string
 let I18N: any

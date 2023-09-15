@@ -2,8 +2,8 @@ import { createApp } from 'vue'
 
 import App from '@/App.vue'
 import router from '@/vue-router'
-import store from '@/stores'
-import i18n from '@/i18n'
+import store from '@/vue-pinia'
+import i18n from '@/vue-i18n'
 
 import '@/plugins'
 import '@/registerServiceWorker'

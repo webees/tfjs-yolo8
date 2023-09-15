@@ -6,7 +6,7 @@
 <script lang="ts" setup>
 import { watch } from 'vue'
 import { useRoute } from 'vue-router'
-import i18n from '@/i18n'
+import i18n from '@/vue-i18n'
 
 const route = useRoute()
 
