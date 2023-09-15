@@ -36,7 +36,7 @@ const vueServe = c => {
 }
 
 const vueConfig = {
-  publicPath: IS_DEV ? '/' : '/',
+  publicPath: IS_DEV ? '/' : '//fastly.jsdelivr.net/gh/webees/tfjs-yolov8@gh-pages/',
   outputDir: 'dist',
   productionSourceMap: IS_DEV,
   integrity: false,
