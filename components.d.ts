@@ -12,5 +12,6 @@ declare module 'vue' {
     TabBar: typeof import('./src/components/TabBar.vue')['default']
     VanTabbar: typeof import('vant/es')['Tabbar']
     VanTabbarItem: typeof import('vant/es')['TabbarItem']
+    VanToast: typeof import('vant/es')['Toast']
   }
 }

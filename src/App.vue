@@ -7,11 +7,13 @@
 <script lang="ts" setup>
 import { showLoadingToast, closeToast } from 'vant'
 import i18n from '@/vue-i18n'
-import { app } from '@/vue-pinia'
+import { yolo } from '@/vue-pinia'
+import { loadModel } from '@/utils/tf'
 
 // title
+const route = useRoute()
 watch(
-  () => useRoute().meta.title,
+  () => route.meta.title,
   v => {
     if (v) {
       window.document.title = i18n.t(v as string)
@@ -22,13 +24,17 @@ watch(
 
 // loading
 watch(
-  () => ref(app().loading),
+  () => yolo().loading,
   v => {
-    if (v) {
+    if (v < 1) {
       showLoadingToast({
-        message: '加载中...',
+        message: `${(v * 100).toFixed(0)}%`,
+        loadingType: 'spinner',
         forbidClick: true,
-        duration: 0
+        duration: 0,
+        onOpened: () => {
+          loadModel() // loadGraphModel
+        }
       })
     } else {
       closeToast()

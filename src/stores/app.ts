@@ -5,6 +5,7 @@ export default defineStore(
   'app',
   () => {
     const language = ref('')
+
     return { language }
   },
   {
