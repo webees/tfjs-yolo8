@@ -63,8 +63,35 @@ const vueConfig = {
         resolvers: [require('unplugin-vue-components/resolvers').VantResolver()]
       }),
       require('unplugin-auto-import/webpack')({
-        imports: ['vue'],
-        dts: './auto-imports.d.ts'
+        // targets to transform
+        include: [
+          /\.[tj]sx?$/, // .ts, .tsx, .js, .jsx
+          /\.vue$/,
+          /\.vue\?vue/, // .vue
+          /\.md$/ // .md
+        ],
+        // global imports to register
+        imports: [
+          'vue',
+          'vue-router',
+          {
+            axios: [
+              ['default', 'axios'] // import { default as axios } from 'axios',
+            ]
+          },
+          {
+            from: 'vue-router',
+            imports: ['RouteLocationRaw'],
+            type: true
+          }
+        ],
+        // Enable auto import by filename for default module exports under directories
+        defaultExportByFilename: false,
+        vueTemplate: false,
+        injectAtEnd: true,
+        eslintrc: {
+          enabled: true
+        }
       })
     ]
   },
