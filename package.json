@@ -1,0 +1,72 @@
+{
+  "name": "tfjs-yolov8",
+  "description": "Using YOLOv8 and Tensorflow.js",
+  "version": "0.1.0",
+  "author": "webees",
+  "license": "MIT",
+  "keywords": [
+    "yolov8",
+    "vant",
+    "tensorflow.js"
+  ],
+  "homepage": "https://github.com/webees/tfjs-yolov8#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/webees/tfjs-yolov8.git"
+  },
+  "bugs": {
+    "url": "https://github.com/webees/tfjs-yolov8/issues"
+  },
+  "scripts": {
+    "git": "npx git-cz@4.5.0",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "lint": "vue-cli-service lint",
+    "nc": "npx npm-check -u",
+    "ncu": "npx ncu -t minor"
+  },
+  "dependencies": {
+    "@tensorflow/tfjs": "^4.11.0",
+    "axios": "^1.5.0",
+    "core-js": "^3.32.2",
+    "pinia": "^2.1.6",
+    "pinia-plugin-persistedstate": "^3.2.0",
+    "register-service-worker": "^1.7.2",
+    "vant": "^4.6.8",
+    "vue": "^3.3.4",
+    "vue-i18n": "^9.4.1",
+    "vue-router": "^4.2.4"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "@vue/cli-plugin-babel": "~5.0.8",
+    "@vue/cli-plugin-eslint": "~5.0.8",
+    "@vue/cli-plugin-pwa": "~5.0.8",
+    "@vue/cli-plugin-router": "~5.0.8",
+    "@vue/cli-plugin-typescript": "~5.0.8",
+    "@vue/cli-service": "~5.0.8",
+    "@vue/eslint-config-typescript": "^9.1.0",
+    "eslint": "^7.32.0",
+    "eslint-config-prettier": "^8.10.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-vue": "^8.7.1",
+    "less": "^4.2.0",
+    "less-loader": "^8.1.1",
+    "lint-staged": "^11.2.6",
+    "npm-check-updates": "^16.14.2",
+    "postcss-px-to-viewport": "^1.1.1",
+    "prettier": "^2.8.8",
+    "typescript": "~4.9.5",
+    "unplugin-vue-components": "^0.25.2"
+  },
+  "gitHooks": {
+    "pre-commit": "lint-staged"
+  },
+  "lint-staged": {
+    "*.{js,jsx,vue,ts,tsx}": [
+      "vue-cli-service lint",
+      "git add"
+    ]
+  }
+}

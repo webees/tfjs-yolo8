@@ -1,0 +1,36 @@
+name: Build and Deploy
+permissions:
+  contents: write
+on:
+  push:
+    branches:
+      - master
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout 🛎️
+        uses: actions/checkout@v3
+
+      - name: Cache ☕
+        id: cache
+        uses: actions/cache@v1
+        with:
+          path: node_modules
+          key: ${{runner.OS}}-npm-caches-${{ hashFiles('package-lock.json') }}
+
+      - name: Install 🔧
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+
+      - name: Build 🔧
+        run: |
+          npm run build
+          cd dist
+          cp index.html 404.html
+
+      - name: Deploy 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          BRANCH: gh-pages
+          FOLDER: dist
