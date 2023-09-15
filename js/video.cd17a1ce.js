@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunktfjs_yolov8"]=self["webpackChunktfjs_yolov8"]||[]).push([[791],{9287:function(e,n,t){t.r(n),t.d(n,{default:function(){return s}});var o=t(311);function r(e,n){return(0,o.openBlock)(),(0,o.createElementBlock)("span",null,"video")}var u=t(3744);const c={},l=(0,u.Z)(c,[["render",r]]);var s=l}}]);

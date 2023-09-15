@@ -1,0 +1,1 @@
+"use strict";(self["webpackChunktfjs_yolov8"]=self["webpackChunktfjs_yolov8"]||[]).push([[201],{3823:function(e,a,o){o.r(a),a["default"]={jaJP:{_tabbar:{image:"Image",video:"Video",webcam:"Webcam"},image:"Image",video:"Video",webcam:"Webcam"}}}}]);
