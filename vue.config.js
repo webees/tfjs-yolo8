@@ -36,7 +36,7 @@ const vueServe = c => {
 }
 
 const vueConfig = {
-  publicPath: IS_DEV ? '/' : '//fastly.jsdelivr.net/gh/webees/tfjs-yolov8@gh-pages/',
+  publicPath: process.env.VUE_APP_PUBLIC_PATH,
   outputDir: 'dist',
   productionSourceMap: IS_DEV,
   integrity: false,
@@ -50,13 +50,23 @@ const vueConfig = {
     open: false,
     proxy: null
   },
+  pwa: {
+    manifestOptions: {
+      start_url: '/'
+    },
+    workboxOptions: {
+      maximumFileSizeToCacheInBytes: 9000000 // <---- increasing the file size to cached 9mb
+    }
+  },
   configureWebpack: {
     externals: {
       'vue-router': 'VueRouter',
       'vue-i18n': 'VueI18n',
       vue: 'Vue',
       axios: 'axios',
-      vant: 'vant'
+      vant: 'vant',
+      '@tensorflow/tfjs': 'tf',
+      '@tensorflow/tfjs-backend-webgl': 'tf.backend'
     },
     plugins: [
       require('unplugin-vue-components/webpack')({

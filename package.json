@@ -22,7 +22,8 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "taze": "npx taze"
+    "taze": "npx taze",
+    "ubd": "npx update-browserslist-db@latest"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.11.0",

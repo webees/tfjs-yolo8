@@ -4,7 +4,7 @@ import { yolo } from '@/vue-pinia'
 
 export function loadModel() {
   tf.ready().then(async () => {
-    const model = await tf.loadGraphModel(`/${yolo().name}_web_model/model.json`, {
+    const model = await tf.loadGraphModel(`${process.env.VUE_APP_PUBLIC_PATH}${yolo().name}_web_model/model.json`, {
       onProgress: progress => {
         console.log('tf.loadGraphModel', progress)
         yolo().loading = progress
