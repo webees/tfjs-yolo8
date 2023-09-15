@@ -1,5 +1,3 @@
-const { VantResolver } = require('unplugin-vue-components/resolvers')
-const ComponentsPlugin = require('unplugin-vue-components/webpack')
 const IS_DEV = process.env.NODE_ENV === 'production' ? false : true
 
 const vueBuild = c => {
@@ -61,8 +59,12 @@ const vueConfig = {
       vant: 'vant'
     },
     plugins: [
-      ComponentsPlugin({
-        resolvers: [VantResolver()]
+      require('unplugin-vue-components/webpack')({
+        resolvers: [require('unplugin-vue-components/resolvers').VantResolver()]
+      }),
+      require('unplugin-auto-import/webpack')({
+        imports: ['vue'],
+        dts: './auto-imports.d.ts'
       })
     ]
   },

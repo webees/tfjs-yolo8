@@ -22,11 +22,12 @@
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
-    "nc": "npx npm-check -u",
-    "ncu": "npx ncu -t minor"
+    "taze": "npx taze"
   },
   "dependencies": {
     "@tensorflow/tfjs": "^4.11.0",
+    "@tensorflow/tfjs-backend-webgl": "^4.11.0",
+    "@tensorflow/tfjs-backend-webgpu": "^4.11.0",
     "axios": "^1.5.0",
     "core-js": "^3.32.2",
     "pinia": "^2.1.6",
@@ -54,10 +55,10 @@
     "less": "^4.2.0",
     "less-loader": "^8.1.1",
     "lint-staged": "^11.2.6",
-    "npm-check-updates": "^16.14.2",
     "postcss-px-to-viewport": "^1.1.1",
     "prettier": "^2.8.8",
     "typescript": "~4.9.5",
+    "unplugin-auto-import": "^0.16.6",
     "unplugin-vue-components": "^0.25.2"
   },
   "gitHooks": {
