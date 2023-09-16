@@ -1,12 +1,13 @@
 export default {
   zhCN: {
     _tabbar: {
-      image: '图像',
+      image: '图片',
       video: '视频',
       webcam: '摄像'
     },
-    image: '图像',
+    image: '图片',
     video: '视频',
-    webcam: '摄像'
+    webcam: '摄像',
+    'Open Image': '打开图片'
   }
 }
