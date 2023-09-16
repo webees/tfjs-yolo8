@@ -8,7 +8,7 @@
 import { showLoadingToast, closeToast } from 'vant'
 import i18n from '@/vue-i18n'
 import { yolo } from '@/vue-pinia'
-import { loadModel } from '@/utils/tf'
+import { loadModel } from '@/composables/yolo'
 
 // title
 const route = useRoute()

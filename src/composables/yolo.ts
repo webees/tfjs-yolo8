@@ -1,12 +1,9 @@
-import type { GraphModel, io, Rank, Tensor, Tensor1D, Tensor2D, Tensor3D } from '@tensorflow/tfjs'
+import type { Rank, Tensor, Tensor1D, Tensor2D, Tensor3D } from '@tensorflow/tfjs'
 import * as tf from '@tensorflow/tfjs'
 import '@tensorflow/tfjs-backend-webgl'
 import { yolo } from '@/vue-pinia'
-
-import { renderBoxes } from '@/utils/renderBox'
 import labels from '@/utils/labels.json'
-
-const numClass = labels.length
+import { renderBoxes } from '@/utils/renderBox'
 
 export function loadModel() {
   tf.ready().then(async () => {
@@ -70,19 +67,14 @@ function preprocess(source: HTMLVideoElement | HTMLImageElement, modelWidth: num
 
 /**
  * Function run inference and do detection from source.
- * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
- * @param {number[]} inputShape
  * @param {HTMLImageElement|HTMLVideoElement} source
  * @param {HTMLCanvasElement} canvasRef canvas reference
  * @param {VoidFunction} callback function to run after detection process
  */
-export async function detect(
-  model: GraphModel<string | io.IOHandler>,
-  inputShape: number[],
-  source: HTMLImageElement | HTMLVideoElement,
-  canvasRef: HTMLCanvasElement,
-  callback: () => void
-) {
+export async function detect(source: HTMLImageElement | HTMLVideoElement, canvasRef: HTMLCanvasElement, callback: () => void) {
+  const model = toRaw(yolo().model)
+  const inputShape = toRaw(yolo().inputShape)
+
   tf.engine().startScope() // start scoping tf engine
   const [modelWidth, modelHeight] = inputShape.slice(1, 3) // get model width and height
   // console.log('shape', modelWidth, modelHeight)
@@ -90,7 +82,7 @@ export async function detect(
   const [input, xRatio, yRatio] = preprocess(source, modelWidth, modelHeight) // preprocess image
   // console.log('ratio', xRatio, yRatio)
 
-  const res = toRaw(model).execute(input) as Tensor<Rank> // Must use toRaw() inference model.
+  const res = model!.execute(input) as Tensor<Rank> // Must use toRaw() inference model.
   const transRes = res.transpose([0, 2, 1]) // transpose result [b, det, n] => [b, n, det]
 
   const boxes = tf.tidy(() => {
@@ -112,12 +104,11 @@ export async function detect(
   }) as Tensor2D // process boxes [y1, x1, y2, x2]
 
   const [scores, classes] = tf.tidy(() => {
-    const rawScores = transRes.slice([0, 0, 4], [-1, -1, numClass]).squeeze() // #6 only squeeze axis 0 to handle only 1 class models
+    const rawScores = transRes.slice([0, 0, 4], [-1, -1, labels.length]).squeeze() // #6 only squeeze axis 0 to handle only 1 class models
     return [rawScores.max(1), rawScores.argMax(1)]
   }) as [Tensor1D, Tensor2D] // get max scores and classes index
 
   const nms = await tf.image.nonMaxSuppressionAsync(boxes, scores, 500, 0.45, 0.2) // NMS to filter boxes
-
   const boxes_data = boxes.gather(nms, 0).dataSync() // indexing boxes by nms index
   const scores_data = scores.gather(nms, 0).dataSync() // indexing scores by nms index
   const classes_data = classes.gather(nms, 0).dataSync() // indexing classes by nms index
@@ -131,34 +122,26 @@ export async function detect(
 }
 
 /**
- * Function to detect video from every source.
+ * Function to detect every frame from video
  * @param {HTMLVideoElement} source video source
  * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
  * @param {HTMLCanvasElement} canvasRef canvas reference
  */
-export function detectVideo(model: GraphModel<string | io.IOHandler>, inputShape: number[], source: HTMLVideoElement, canvasRef: HTMLCanvasElement) {
-  /**
-   * Function to detect every frame from video
-   */
+export function detectVideo(source: HTMLVideoElement, canvasRef: HTMLCanvasElement) {
   let animationId = -1
   const detectFrame = async () => {
-    if (source.videoWidth === 0 && source.srcObject === null) {
-      console.warn('source.srcObject === null')
+    if (source.paused) {
+      console.log('source.paused', source.paused)
       const ctx = canvasRef.getContext('2d')
-      ctx && ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height) // clean canvas
+      ctx && ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
+      cancelAnimationFrame(animationId)
+      console.warn('cancelAnimationFrame', animationId)
       return // handle if source is closed
     }
-
-    detect(model, inputShape, source, canvasRef, () => {
+    detect(source, canvasRef, () => {
       animationId = requestAnimationFrame(detectFrame) // get another frame
     })
   }
 
   detectFrame() // initialize to detect every frame
-  return animationId
-}
-
-export function unDetectVideo(id: number) {
-  cancelAnimationFrame(id)
-  console.warn('unDetectVideo', id)
 }
