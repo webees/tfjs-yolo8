@@ -47,7 +47,7 @@ function preprocess(source: HTMLVideoElement | HTMLImageElement, modelWidth: num
 
     // padding image to square => [n, m] to [n, n], n > m
     const [h, w] = img.shape.slice(0, 2) // get source width and height
-    console.log('image', h, w)
+    // console.log('image', h, w)
 
     const maxSize = Math.max(w, h) // get max size
     const imgPadded = img.pad([
@@ -85,12 +85,12 @@ export async function detect(
 ) {
   tf.engine().startScope() // start scoping tf engine
   const [modelWidth, modelHeight] = inputShape.slice(1, 3) // get model width and height
-  console.log('shape', modelWidth, modelHeight)
+  // console.log('shape', modelWidth, modelHeight)
 
   const [input, xRatio, yRatio] = preprocess(source, modelWidth, modelHeight) // preprocess image
-  console.log('ratio', xRatio, yRatio)
+  // console.log('ratio', xRatio, yRatio)
 
-  const res = toRaw(model).execute(input) as Tensor<Rank> // inference model
+  const res = toRaw(model).execute(input) as Tensor<Rank> // Must use toRaw() inference model.
   const transRes = res.transpose([0, 2, 1]) // transpose result [b, det, n] => [b, n, det]
 
   const boxes = tf.tidy(() => {
@@ -128,4 +128,37 @@ export async function detect(
   callback()
 
   tf.engine().endScope() // end of scoping
+}
+
+/**
+ * Function to detect video from every source.
+ * @param {HTMLVideoElement} source video source
+ * @param {tf.GraphModel} model loaded YOLOv8 tensorflow.js model
+ * @param {HTMLCanvasElement} canvasRef canvas reference
+ */
+export function detectVideo(model: GraphModel<string | io.IOHandler>, inputShape: number[], source: HTMLVideoElement, canvasRef: HTMLCanvasElement) {
+  /**
+   * Function to detect every frame from video
+   */
+  let animationId = -1
+  const detectFrame = async () => {
+    if (source.videoWidth === 0 && source.srcObject === null) {
+      console.warn('source.srcObject === null')
+      const ctx = canvasRef.getContext('2d')
+      ctx && ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height) // clean canvas
+      return // handle if source is closed
+    }
+
+    detect(model, inputShape, source, canvasRef, () => {
+      animationId = requestAnimationFrame(detectFrame) // get another frame
+    })
+  }
+
+  detectFrame() // initialize to detect every frame
+  return animationId
+}
+
+export function unDetectVideo(id: number) {
+  cancelAnimationFrame(id)
+  console.warn('unDetectVideo', id)
 }

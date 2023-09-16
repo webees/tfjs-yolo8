@@ -2,7 +2,7 @@
   <span class="absolute w-full h-full flex justify-center items-center">
     <van-uploader :after-read="afterRead" reupload max-count="1">
       <canvas v-if="imageUrl" ref="canvasRef" class="absolute top-0 w-full h-full" :width="yolo().inputShape[1]" :height="yolo().inputShape[2]" />
-      <img v-if="imageUrl" ref="imageRef" :src="imageUrl" @load="onImageLoadDetect" class="w-full" />
+      <img v-if="imageUrl" ref="imageRef" :src="imageUrl" @load="onImageLoadDetect" class="w-full h-full" />
       <van-button v-else icon="plus" type="primary">{{ i18n.t('Open Image') }}</van-button>
     </van-uploader>
   </span>
