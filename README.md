@@ -1,4 +1,11 @@
-# vant-base
+# tfjs-yolo8
+- tfjs
+- yolov8
+- vue
+- pinia
+- vue-i18n
+- vant
+
 
 ## Project setup
 ```
@@ -20,5 +27,5 @@ npm run build
 npm run lint
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Reference
+https://github.com/Hyuto/yolov8-tfjs
